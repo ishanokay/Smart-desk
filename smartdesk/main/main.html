@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Desk Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(0, 0, 0, 0.08);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-color: #2563eb;
+            --accent-gradient: linear-gradient(135deg, #2563eb, #60a5fa);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --footer-border: #cbd5e1;
+        }
+
+        body.dark {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-color: #60a5fa;
+            --accent-gradient: linear-gradient(135deg, #3b82f6, #60a5fa);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --footer-border: #1e293b;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #c9e4ff;;
+            background-image: radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.07), transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(14, 165, 233, 0.07), transparent 50%);
+            color: var(--text-primary);
+            transition: all 0.4s ease-in-out;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .widget-card {
+            background: var(--card-bg);
+            border: 1px solid black;
+            backdrop-filter: blur(20px);
+            border-radius: 1.5rem;
+            transition: all 0.35s ease-in-out;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            cursor: pointer;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        header.widget-card {
+            border: 3px solid black;
+        }
+
+        .widget-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 12px 35px var(--shadow-color);
+        }
+
+        .btn-launch {
+            background: var(--accent-gradient);
+            transition: all 0.25s ease-in-out;
+            display: inline-block;
+        }
+
+        .btn-launch:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+        }
+
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-switch {
+            display: inline-block;
+            height: 34px;
+            position: relative;
+            width: 60px;
+        }
+
+        .theme-switch input {
+            display: none;
+        }
+
+        .slider {
+            background-color: #94a3b8;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 26px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 26px;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+        }
+
+        footer {
+            border-top: 5px solid grey;
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        @keyframes float-more {
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(8px, -4px);
+            }
+            50% {
+                transform: translate(0px, 2px);
+            }
+            75% {
+                transform: translate(-8px, -4px);
+            }
+        }
+
+        .header-float-on-hover:hover {
+            animation: float-more 4s ease-in-out infinite;
+            transform: none;
+            box-shadow: 0 12px 35px var(--shadow-color);
+        }
+        /* --- NEW: Mobile Responsiveness --- */
+@media (max-width: 640px) {
+    .dashboard-container {
+        /* Reduce overall padding on mobile */
+        padding: 1.5rem 1rem;
+    }
+
+    /* Scale down header elements */
+    header.widget-card h1 {
+        font-size: 1.5rem; /* Equivalent to text-2xl */
+    }
+    header.widget-card #weather-temp {
+        font-size: 1.5rem; /* Equivalent to text-2xl */
+    }
+    header.widget-card #weather-icon {
+        font-size: 2rem; /* Smaller icon */
+    }
+
+    /* Adjust main widget grid and content */
+    main.grid {
+        gap: 1rem; /* Reduce gap between cards */
+    }
+    main .widget-card {
+        padding: 1.25rem; /* Less padding inside cards */
+    }
+    main .widget-card .text-5xl {
+        font-size: 2.5rem; /* text-4xl */
+        margin-bottom: 0.75rem;
+    }
+    main .widget-card h2 {
+        font-size: 1.125rem; /* text-lg */
+    }
+
+    /* Adjust footer spacing */
+    footer {
+        margin-top: 2rem;
+    }
+}
+    </style>
+</head>
+
+<body class="min-h-screen">
+
+    <div class="dashboard-container">
+        <header
+            class="widget-card header-float-on-hover p-6 mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-center md:text-left">
+                <h1 class="text-3xl font-bold flex items-center gap-3">
+                    <i class="fas fa-desktop floating text-blue-600"></i> Smart Desk
+                </h1>
+                <p id="current-date" class="text-lg" style="color: var(--text-secondary);"></p>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <div id="weather-widget" class="text-right">
+                    <div class="flex items-center gap-2">
+                        <div class="w-12 h-12 flex justify-center items-center">
+                            <i id="weather-icon" class="text-4xl"></i>
+                        </div>
+                        <p id="weather-temp" class="text-3xl font-semibold"></p>
+                    </div>
+                    <p id="weather-city" class="text-sm" style="color: var(--text-secondary);"></p>
+                </div>
+
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider"></div>
+                    </label>
+                </div>
+            </div>
+        </header>
+
+        <main class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <a href="../project_5/calci.html" class="widget-card p-6 flex flex-col items-center text-center">
+                <div class="text-5xl mb-4 text-green-500 floating"><i class="fas fa-calculator"></i></div>
+                <h2 class="text-xl font-semibold mb-2">Calculator</h2>
+                <p class="text-sm mb-4" style="color: var(--text-secondary);">Perform scientific calculations with ease.
+                </p>
+                <span class="btn-launch mt-auto w-full py-2 rounded-lg font-semibold text-white">Launch</span>
+            </a>
+            <a href="../project_7/worldclock.html" class="widget-card p-6 flex flex-col items-center text-center">
+                <div class="text-5xl mb-4 text-blue-500 floating"><i class="fas fa-globe"></i></div>
+                <h2 class="text-xl font-semibold mb-2">World Clock</h2>
+                <p class="text-sm mb-4" style="color: var(--text-secondary);">Check live time across the world.</p>
+                <span class="btn-launch mt-auto w-full py-2 rounded-lg font-semibold text-white">Launch</span>
+            </a>
+            <a href="../project_6/clock.html" class="widget-card p-6 flex flex-col items-center text-center">
+                <div class="text-5xl mb-4 text-indigo-500 floating"><i class="fas fa-clock"></i></div>
+                <h2 class="text-xl font-semibold mb-2">Clock</h2>
+                <p class="text-sm mb-4" spanstyle="color: var(--text-secondary);">Beautiful analog & digital clock with
+                    stopwatch.</p>
+                <span class="btn-launch mt-auto w-full py-2 rounded-lg font-semibold text-white">Launch</span>
+            </a>
+            <a href="../project_3/converter.html" class="widget-card p-6 flex flex-col items-center text-center">
+                <div class="text-5xl mb-4 text-teal-500 floating"><i class="fas fa-exchange-alt"></i></div>
+                <h2 class="text-xl font-semibold mb-2">Converter</h2>
+                <p class="text-sm mb-4" style="color: var(--text-secondary);">Convert currency, weight, and units
+                    instantly.</p>
+                <span class="btn-launch mt-auto w-full py-2 rounded-lg font-semibold text-white">Launch</span>
+            </a>
+            <a href="../project_4/todo.html" class="widget-card p-6 flex flex-col items-center text-center">
+                <div class="text-5xl mb-4 text-purple-500 floating"><i class="fas fa-list-check"></i></div>
+                <h2 class="text-xl font-semibold mb-2">To-Do List</h2>
+                <p class="text-sm mb-4" style="color: var(--text-secondary);">Organize tasks and stay focused.</p>
+                <span class="btn-launch mt-auto w-full py-2 rounded-lg font-semibold text-white">Launch</span>
+            </a>
+            <a href="../project_8/wheather.html" class="widget-card p-6 flex flex-col items-center text-center">
+                <div class="text-5xl mb-4 text-orange-500 floating"><i class="fas fa-cloud-sun-rain"></i></div>
+                <h2 class="text-xl font-semibold mb-2">Weather App</h2>
+                <p class="text-sm mb-4" style="color: var(--text-secondary);">Get detailed live forecasts for any city.
+                </p>
+                <span class="btn-launch mt-auto w-full py-2 rounded-lg font-semibold text-white">Launch</span>
+            </a>
+        </main>
+
+        <footer class="text-center mt-12 py-6">
+            <p class="font-semibold text-lg">Smart Desk Project</p>
+            <p class="text-sm" style="color: var(--text-secondary);">Designed to streamline your workflow & inspire
+                creativity ✨</p>
+            <div class="mt-4">
+                <a href="../project_2/profile.html"
+                    class="btn-launch inline-block px-6 py-2 rounded-lg font-semibold text-white text-sm">Meet the
+                    Team</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // --- Live Date ---
+        const dateElement = document.getElementById('current-date');
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        dateElement.textContent = new Date().toLocaleDateString('en-US', dateOptions);
+
+        // --- Weather Widget ---
+        const weatherAPIKey = 'fcca74c6081cf5994925d225061ce4d5';
+        const weatherIcon = document.getElementById('weather-icon');
+        const weatherTemp = document.getElementById('weather-temp');
+        const weatherCity = document.getElementById('weather-city');
+
+        function getWeatherIconDetails(iconCode) {
+            const iconMap = {
+                '01d': { iconClass: 'fa-sun', colorClass: 'text-yellow-400' },
+                '02d': { iconClass: 'fa-cloud-sun', colorClass: 'text-slate-400' },
+                '03d': { iconClass: 'fa-cloud', colorClass: 'text-slate-400' },
+                '04d': { iconClass: 'fa-cloud', colorClass: 'text-slate-500' },
+                '09d': { iconClass: 'fa-cloud-showers-heavy', colorClass: 'text-blue-500' },
+                '10d': { iconClass: 'fa-cloud-sun-rain', colorClass: 'text-blue-400' },
+                '11d': { iconClass: 'fa-cloud-bolt', colorClass: 'text-indigo-600' },
+                '13d': { iconClass: 'fa-snowflake', colorClass: 'text-cyan-300' },
+                '50d': { iconClass: 'fa-smog', colorClass: 'text-slate-500' },
+                '01n': { iconClass: 'fa-moon', colorClass: 'text-slate-400' },
+                '02n': { iconClass: 'fa-cloud-moon', colorClass: 'text-slate-500' },
+                '03n': { iconClass: 'fa-cloud', colorClass: 'text-slate-500' },
+                '04n': { iconClass: 'fa-cloud', colorClass: 'text-slate-600' },
+                '09n': { iconClass: 'fa-cloud-showers-heavy', colorClass: 'text-blue-600' },
+                '10n': { iconClass: 'fa-cloud-moon-rain', colorClass: 'text-blue-500' },
+                '11n': { iconClass: 'fa-cloud-bolt', colorClass: 'text-indigo-700' },
+                '13n': { iconClass: 'fa-snowflake', colorClass: 'text-cyan-400' },
+                '50n': { iconClass: 'fa-smog', colorClass: 'text-slate-600' },
+            };
+            return iconMap[iconCode] || { iconClass: 'fa-question-circle', colorClass: 'text-gray-400' };
+        }
+
+        async function getWeatherData(lat, lon) {
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${weatherAPIKey}&units=metric`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Weather data not found');
+                const data = await response.json();
+
+                const { iconClass, colorClass } = getWeatherIconDetails(data.weather[0].icon);
+                weatherIcon.className = `fas ${iconClass} ${colorClass} text-4xl`;
+
+                weatherTemp.innerHTML = `${Math.round(data.main.temp)}&deg;C`;
+                weatherCity.textContent = data.name;
+            } catch (error) {
+                console.error("Weather Fetch Error:", error);
+                weatherCity.textContent = 'Weather unavailable';
+            }
+        }
+
+        function getInitialLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => getWeatherData(pos.coords.latitude, pos.coords.longitude),
+                    (err) => {
+                        console.warn(`Geolocation Error(${err.code}): ${err.message}`);
+                        getWeatherData(12.9165, 79.1325); // fallback Vellore
+                    }
+                );
+            } else {
+                console.log("Geolocation is not supported by this browser.");
+                getWeatherData(12.9165, 79.1325); // fallback Vellore
+            }
+        }
+
+        // --- Theme Toggle with Persistence ---
+        const themeToggle = document.getElementById('checkbox');
+        const body = document.body;
+
+        const applyTheme = () => {
+            const isDark = localStorage.getItem('darkTheme') === 'true';
+            themeToggle.checked = isDark;
+            if (isDark) {
+                body.classList.add('dark');
+            } else {
+                body.classList.remove('dark');
+            }
+        };
+
+        themeToggle.addEventListener('change', () => {
+            if (body.classList.contains('dark')) {
+                body.classList.remove('dark');
+                localStorage.setItem('darkTheme', 'false');
+            } else {
+                body.classList.add('dark');
+                localStorage.setItem('darkTheme', 'true');
+            }
+        });
+
+        // --- Initialize ---
+        window.onload = () => {
+            getInitialLocation();
+            applyTheme();
+        };
+    </script>
+</body>
+
+</html>

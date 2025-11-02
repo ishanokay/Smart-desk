@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Daily Tasks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="todo.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="header-content-wrapper">
+            <h2>Launch Your Day Right.</h2>
+            <p>Define your tasks, conquer your goals, and track your progress!</p>
+        </div>
+    </header>
+    <div class="card-container">
+        <header>
+            <i class="fas fa-list-check"></i>
+            <h1>Today's Focus List</h1>
+        </header>
+
+        <div class="input-area">
+            <input type="text" id="task-input" placeholder="What needs to be done?">
+            <button id="add-button" title="Add Task">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+
+        <ul id="task-list">
+        </ul>
+
+        <div class="task-stats">
+            <span id="pending-count">0 tasks remaining</span>
+            <button id="download-button" title="Download List">
+                <i class="fas fa-download"></i> Save List
+            </button>
+            <button id="clear-completed-button" title="Clear Completed Tasks">Clear All</button>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <p>✨ **Stay Focused, Stay Productive.** Your day, organized.</p>
+        <p>&copy; 2025 Dynamic Task Manager | Built with Passion & Code.</p>
+    </footer>
+    <script src="todo.js"></script>
+</body>
+
+</html>

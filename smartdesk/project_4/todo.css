@@ -1,0 +1,410 @@
+/* Reset and Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f4f8; 
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    /* REMOVED base padding from body to ensure header/footer touch the edge */
+    padding: 0; 
+}
+
+/* === ATTRACTIVE MAIN HEADER STYLING === */
+.main-header {
+    background-color: #34495e; 
+    color: white;
+    width: 100vw; /* Ensure it spans the whole screen */
+    position: static; 
+    padding: 15px 0; 
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px; 
+}
+
+.header-content-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-header h2 {
+    font-weight: 700;
+    font-size: 1.6rem;
+    margin-top: 5px;
+    margin-bottom: 3px;
+}
+
+.main-header p {
+    font-size: 0.8rem;
+    color: #bdc3c7;
+    margin-bottom: 0;
+}
+
+.header-icon {
+    font-size: 1.8rem;
+    color: #2ecc71; 
+}
+/* ======================================= */
+
+
+/* Main Card Container (The central box) */
+.card-container {
+    background: #ffffff;
+    padding: 50px; 
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(50, 115, 220, 0.15); 
+    width: 100%;
+    max-width: 600px; 
+    min-height: 80vh; 
+    display: flex;
+    flex-direction: column;
+    
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+header { /* Styles for the internal header inside .card-container */
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+header i {
+    font-size: 1.5rem;
+    color: #3498db; 
+}
+
+h1 {
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+/* Input Area */
+.input-area {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+#task-input {
+    flex-grow: 1;
+    padding: 12px 15px;
+    border: 2px solid #dfe6e9;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+#task-input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+#add-button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s, transform 0.1s;
+    line-height: 1;
+    font-weight: 600;
+}
+
+#add-button:hover {
+    background-color: #2980b9;
+    transform: translateY(-1px);
+}
+
+/* Task List */
+#task-list {
+    list-style: none;
+    padding: 0;
+    flex-grow: 1; 
+    
+    max-height: 50vh; 
+    overflow-y: auto; 
+    padding-right: 10px; 
+}
+
+/* Optional: Scrollbar Styling (Webkit only) */
+#task-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#task-list::-webkit-scrollbar-thumb {
+    background-color: #bdc3c7;
+    border-radius: 10px;
+}
+
+#task-list li {
+    background: #f9fbfd; 
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: box-shadow 0.2s;
+    border-left: 5px solid #bdc3c7; 
+}
+
+#task-list li:hover {
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Styling for the new task content container (for date/time stacking) */
+.task-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-right: 15px;
+}
+
+.task-text {
+    font-weight: 600; 
+    flex-grow: 1;
+    font-size: 1.05rem;
+    color: #333;
+    cursor: pointer;
+}
+
+.timestamp {
+    font-size: 0.75rem; 
+    color: #95a5a6; 
+    margin-top: 2px;
+}
+
+/* Completed Task State */
+#task-list li.completed {
+    background: #e6f7ff; 
+    border-left-color: #2ecc71; 
+}
+
+#task-list li.completed .task-text {
+    text-decoration: line-through;
+    color: #7f8c8d;
+}
+
+#task-list li.completed .timestamp {
+    color: #bdc3c7;
+}
+
+/* Delete Button Styling */
+.delete-btn {
+    background-color: #e74c3c; 
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Footer Stats */
+.task-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #8f8e8e;
+    gap: 10px;
+}
+
+#pending-count {
+    color: #95a5a6;
+    font-size: 0.9rem;
+    font-weight: 600;
+    flex-grow: 1;
+    text-align: left;
+}
+
+/* Clear All Button Styling */
+#clear-completed-button {
+    background-color: #e74c3c; 
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+}
+
+#clear-completed-button:hover {
+    background-color: #c0392b;
+}
+
+/* === NEW DOWNLOAD BUTTON STYLING (DISTINCT COLOR) === */
+#download-button {
+    background-color: #1a73e8; /* Google Blue - Authoritative and distinct */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+}
+
+#download-button:hover {
+    background-color: #1764c9;
+}
+/* ======================================= */
+
+
+/* === ATTRACTIVE FOOTER STYLING === */
+/* --- FOOTER STYLING --- */
+.main-footer {
+    width: 100vw; 
+    background-color: #575a5b; /* Using the provided color */
+    color: #f7f9fc; 
+    /* DECREASED HEIGHT HERE */
+    padding: 15px 0; 
+    /* ---------------------- */
+    margin-top: auto; 
+    text-align: center;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); 
+    flex-shrink: 0; 
+}
+
+/* Ensure the text lines are centered correctly within the footer */
+.main-footer p {
+    margin: 5px auto; /* Auto margin centers the paragraph block horizontally */
+    font-size: 0.9rem;
+    max-width: 90%; /* Prevent lines from stretching too wide on massive screens */
+}
+
+.main-footer a {
+    color: #00bcd4; 
+    text-decoration: none;
+    font-weight: bold;
+    transition: text-decoration 0.2s;
+}
+
+.main-footer a:hover {
+    text-decoration: underline;
+}
+/* ---------------- MEDIA QUERIES ---------------- */
+
+/* Mobile Optimization (<= 600px) */
+@media (max-width: 600px) {
+    body {
+        padding: 0; 
+    }
+
+    /* Adjust main header for mobile */
+    .main-header {
+        padding: 10px 0; 
+        margin-bottom: 15px; 
+    }
+
+    .main-header h2 {
+        font-size: 1.3rem; 
+    }
+
+    .main-header p {
+        font-size: 0.75rem; 
+    }
+
+    .header-icon {
+        font-size: 1.4rem; 
+    }
+
+
+    .card-container {
+        width: 100%;
+        max-width: none;
+        min-height: 100vh;
+        padding: 25px 20px; 
+        border-radius: 0; 
+        box-shadow: none; 
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    /* Input stacking for easy tapping */
+    .input-area {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    #task-input {
+        padding: 15px; 
+    }
+
+    #add-button {
+        padding: 15px; 
+    }
+
+    /* Task List Adjustment */
+    #task-list {
+        max-height: 65vh; 
+    }
+    
+    #task-list li {
+        padding: 12px;
+    }
+
+    .task-text {
+        font-size: 1rem;
+    }
+    
+    .timestamp {
+        font-size: 0.7rem;
+    }
+
+    /* Footer Stats - STACK BUTTONS VERTICALLY */
+    .task-stats {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding-top: 15px;
+    }
+
+    #pending-count {
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    #clear-completed-button, #download-button {
+        width: 100%;
+        margin: 0;
+    }
+    
+    /* Adjust main footer for mobile */
+    .main-footer {
+        padding: 10px 0; 
+        font-size: 0.8rem; 
+    }
+}

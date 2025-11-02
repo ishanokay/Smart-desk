@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Clock</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+    :root {
+        --bg-color: #f4f4f5;
+        --container-bg: #ffffff;
+        --container-border: #e4e4e7;
+        --primary-text: #18181b;
+        --secondary-text: #71717a;
+        --accent-color: #ef4444; /* Red for second hand */
+        --button-bg: #f4f4f5;
+        --button-hover-bg: #e4e4e7;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #ececff;;
+        color: var(--primary-text);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .main-container {
+        width: 100%;
+        max-width: 800px;
+        display: flex;
+        gap: 40px;
+        background: var(--container-bg);
+        border: 1px solid var(--container-border);
+        border-radius: 25px;
+        padding: 40px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .analog-clock-container {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .analog-clock {
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+        position: relative;
+        background-color: #fff;
+        border: 8px solid var(--primary-text);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    .analog-clock::before {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background: var(--primary-text);
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+    }
+    
+    .analog-clock .marking {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transform-origin: center;
+    }
+    .analog-clock .marking::before {
+        content: '';
+        position: absolute;
+        top: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1px;
+        height: 6px;
+        background: var(--secondary-text);
+    }
+    .analog-clock .marking.hour-mark::before {
+        width: 3px;
+        height: 10px;
+        background: var(--primary-text);
+    }
+    .analog-clock .number {
+        position: absolute;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary-text);
+    }
+    .analog-clock .number.n12 { top: 18px; left: 50%; transform: translateX(-50%); }
+    .analog-clock .number.n3 { top: 50%; right: 22px; transform: translateY(-50%); }
+    .analog-clock .number.n6 { bottom: 18px; left: 50%; transform: translateX(-50%); }
+    .analog-clock .number.n9 { top: 50%; left: 22px; transform: translateY(-50%); }
+
+
+    .analog-clock .hand {
+        --rotation: 0;
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        transform-origin: bottom;
+        transform: translateX(-50%) rotate(calc(var(--rotation) * 1deg));
+        border-radius: 5px;
+    }
+    .analog-clock .hour { width: 6px; height: 65px; background: var(--primary-text); }
+    .analog-clock .minute { width: 4px; height: 90px; background: var(--primary-text); }
+    .analog-clock .second { width: 2px; height: 105px; background: var(--accent-color); }
+
+    .digital-container {
+        flex: 1;
+        text-align: center;
+    }
+    
+    h1 { font-size: 1.5rem; margin-top:0; margin-bottom: 15px; letter-spacing: 1px; color: var(--primary-text); }
+    h2 { font-size: 1.2rem; margin-top:0; margin-bottom: 15px; color: var(--primary-text); font-weight: 600; }
+
+    .clock { font-size: 3rem; font-weight: 600; letter-spacing: 2px; color: var(--primary-text); margin-bottom: 5px; }
+    .date { font-size: 1rem; color: var(--secondary-text); margin-bottom: 15px; }
+    .quote-box { font-size: 0.9rem; color: var(--secondary-text); font-style: italic; transition: opacity 0.5s ease; min-height: 40px; }
+
+    .stopwatch { margin-top: 25px; }
+    .display { font-size: 1.8rem; background: var(--bg-color); padding: 8px 20px; border-radius: 10px; margin-bottom: 15px; display: inline-block; color: var(--primary-text); }
+
+    .buttons button {
+        padding: 8px 18px;
+        margin: 5px;
+        border: 1px solid var(--container-border);
+        border-radius: 8px;
+        font-size: 0.9rem;
+        background: var(--button-bg);
+        color: var(--primary-text);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .buttons button:hover {
+        background: var(--button-hover-bg);
+        border-color: #d4d4d8;
+    }
+
+    @media (max-width: 768px) {
+        body { height: auto; padding: 30px 20px;}
+        .main-container { flex-direction: column; max-width: 380px; padding: 30px; }
+        .analog-clock-container { margin-bottom: 30px; }
+        .clock { font-size: 2.5rem; }
+    }
+
+</style>
+</head>
+<body>
+
+<div class="main-container">
+    <div class="analog-clock-container">
+        <div class="analog-clock" id="analogClock">
+            <div class="hand hour" id="hourHand"></div>
+            <div class="hand minute" id="minuteHand"></div>
+            <div class="hand second" id="secondHand"></div>
+            <div class="number n12">12</div>
+            <div class="number n3">3</div>
+            <div class="number n6">6</div>
+            <div class="number n9">9</div>
+        </div>
+    </div>
+
+    <div class="digital-container">
+        <h1>Smart clock</h1>
+        <div class="clock" id="digitalClock">00:00:00</div>
+        <div class="date" id="dateDisplay"></div>
+        <div class="quote-box" id="quoteBox">Loading motivation...</div>
+
+        <div class="stopwatch">
+            <h2>Stopwatch</h2>
+            <div class="display" id="stopwatchDisplay">00:00:00</div>
+            <div class="buttons">
+                <button onclick="startStopwatch()">Start</button>
+                <button onclick="pauseStopwatch()">Pause</button>
+                <button onclick="resetStopwatch()">Reset</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- ANALOG CLOCK ---
+    const hourHand = document.getElementById('hourHand');
+    const minuteHand = document.getElementById('minuteHand');
+    const secondHand = document.getElementById('secondHand');
+    const analogClock = document.getElementById('analogClock');
+    
+    function setAnalogClock() {
+        const now = new Date();
+        const seconds = now.getSeconds();
+        const minutes = now.getMinutes();
+        const hours = now.getHours();
+
+        const secondsRatio = seconds / 60;
+        const minutesRatio = (secondsRatio + minutes) / 60;
+        const hoursRatio = (minutesRatio + hours) / 12;
+
+        setRotation(secondHand, secondsRatio);
+        setRotation(minuteHand, minutesRatio);
+        setRotation(hourHand, hoursRatio);
+    }
+
+    function setRotation(element, rotationRatio) {
+        element.style.setProperty('--rotation', rotationRatio * 360);
+    }
+
+    function createClockMarkings() {
+        for (let i = 1; i <= 60; i++) {
+            const marking = document.createElement('div');
+            marking.classList.add('marking');
+            if (i % 5 === 0) {
+                marking.classList.add('hour-mark');
+            }
+            marking.style.transform = `rotate(${i * 6}deg)`;
+            analogClock.appendChild(marking);
+        }
+    }
+    
+    createClockMarkings();
+    setInterval(setAnalogClock, 1000);
+    setAnalogClock();
+
+    // --- DIGITAL CLOCK ---
+    function updateDigitalClock() {
+        const clock = document.getElementById('digitalClock');
+        const dateDisplay = document.getElementById('dateDisplay');
+        const now = new Date();
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        let seconds = now.getSeconds();
+        let session = "AM";
+        if (hours >= 12) { session = "PM"; }
+        if (hours == 0) { hours = 12; }
+        if (hours > 12) { hours = hours - 12; }
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        clock.textContent = `${hours}:${minutes}:${seconds} ${session}`;
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        dateDisplay.textContent = now.toLocaleDateString('en-US', options);
+    }
+    setInterval(updateDigitalClock, 1000);
+    updateDigitalClock();
+
+    // --- MOTIVATIONAL QUOTES ---
+    const quotes = [
+        "Believe in yourself — you are stronger than you think.",
+        "Every second is a chance to change your life.",
+        "Push yourself, because no one else is going to do it for you.",
+        "Don’t watch the clock; do what it does. Keep going.",
+        "Success is the sum of small efforts repeated daily.",
+        "Dream big. Work hard. Stay focused.",
+        "Your future is created by what you do today, not tomorrow."
+    ];
+    function showRandomQuote() {
+        const quoteBox = document.getElementById('quoteBox');
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        quoteBox.style.opacity = 0;
+        setTimeout(() => {
+            quoteBox.textContent = `"${quotes[randomIndex]}"`;
+            quoteBox.style.opacity = 1;
+        }, 500);
+    }
+    showRandomQuote();
+    setInterval(showRandomQuote, 10000);
+
+    // --- STOPWATCH ---
+    let stopwatchInterval;
+    let elapsedTime = 0;
+    let isRunning = false;
+    function startStopwatch() {
+        if (isRunning) return;
+        isRunning = true;
+        const startTime = Date.now() - elapsedTime;
+        stopwatchInterval = setInterval(() => {
+            elapsedTime = Date.now() - startTime;
+            updateStopwatchDisplay();
+        }, 100);
+    }
+    function pauseStopwatch() {
+        isRunning = false;
+        clearInterval(stopwatchInterval);
+    }
+    function resetStopwatch() {
+        isRunning = false;
+        clearInterval(stopwatchInterval);
+        elapsedTime = 0;
+        updateStopwatchDisplay();
+    }
+    function updateStopwatchDisplay() {
+        const display = document.getElementById('stopwatchDisplay');
+        const totalSeconds = Math.floor(elapsedTime / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        display.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+</script>
+
+</body>
+</html>
+

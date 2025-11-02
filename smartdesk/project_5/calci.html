@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #eef1f6;
+            --calculator-bg: #ffffff;
+            --display-bg: #f8f9fa;
+            --text-color: #212529;
+            --text-secondary-color: #6c757d;
+            --button-bg: #f8f9fa;
+            --button-hover-bg: #e9ecef;
+            --function-bg: #e9ecef;
+            --function-hover-bg: #dee2e6;
+            --operator-bg: #ff9f0a;
+            --operator-hover-bg: #f09500;
+            --equals-bg: #007aff;
+            --equals-hover-bg: #006ee6;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            --button-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 300;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+        }
+
+        .calculator {
+            width: 100%;
+            max-width: 500px;
+            background: var(--calculator-bg);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 25px;
+            box-sizing: border-box;
+            transition: all 0.2s ease-in-out;
+            border: 2px solid black;
+        }
+
+        .display {
+            width: 100%;
+            background-color: var(--display-bg);
+            border-radius: 16px;
+            padding: 20px;
+            box-sizing: border-box;
+            margin-bottom: 25px;
+            text-align: right;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            border: 2px solid gray;
+        }
+
+        #display-expression {
+            min-height: 24px;
+            font-size: 1.1rem;
+            color: var(--text-secondary-color);
+            margin-bottom: 5px;
+        }
+
+        #display-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: clamp(2rem, 8vw, 3rem);
+            font-weight: 400;
+            text-align: right;
+            color: var(--text-color);
+            outline: none;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        button {
+            border: none;
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            padding: 18px 0;
+            font-size: 1.1rem;
+            font-family: 'Poppins', sans-serif;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+            box-shadow: var(--button-shadow);
+        }
+
+        button:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        button:active {
+            transform: scale(0.96);
+            box-shadow: none;
+        }
+
+        .function {
+            background-color: var(--function-bg);
+        }
+
+        .function:hover {
+            background-color: var(--function-hover-bg);
+        }
+
+        .operator {
+            background-color: var(--operator-bg);
+            color: white;
+            font-size: 1.4rem;
+        }
+
+        .operator:hover {
+            background-color: var(--operator-hover-bg);
+        }
+
+        #clear,
+        #backspace {
+            color: #dc3545;
+            font-size: 1.1rem;
+        }
+
+        #equals {
+            grid-column: span 2;
+            background-color: var(--equals-bg);
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        #equals:hover {
+            background-color: var(--equals-hover-bg);
+        }
+
+        /* --- NEW: MEDIA QUERY FOR MOBILE DEVICES --- */
+        @media (max-width: 480px) {
+            .calculator {
+                /* Make the calculator take up more screen width with less padding */
+                width: 95vw;
+                max-width: none;
+                padding: 20px 15px;
+            }
+
+            .buttons {
+                /* Reduce the gap between buttons */
+                gap: 10px;
+            }
+
+            button {
+                /* Make buttons taller and font slightly larger for better tapping */
+                padding: 20px 0;
+                font-size: 1.2rem;
+                font-weight: 400;
+            }
+
+            .operator {
+                font-size: 1.5rem;
+            }
+
+            #equals {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calculator">
+        <div class="display">
+            <div id="display-expression"></div>
+            <input type="text" id="display-input" readonly placeholder="0">
+        </div>
+        <div class="buttons">
+            <button class="function" onclick="appendToDisplay('sin(')">sin</button>
+            <button class="function" onclick="appendToDisplay('cos(')">cos</button>
+            <button class="function" onclick="appendToDisplay('tan(')">tan</button>
+            <button class="function" onclick="appendToDisplay('(')">(</button>
+            <button class="function" onclick="appendToDisplay(')')">)</button>
+            <button class="function" onclick="appendToDisplay('log(')">log</button>
+            <button class="function" onclick="appendToDisplay('ln(')">ln</button>
+            <button class="function" onclick="appendToDisplay('^')">xʸ</button>
+            <button class="function" onclick="appendToDisplay('√(')">√</button>
+            <button class="function operator" id="backspace" onclick="backspace()">DEL</button>
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button class="function" onclick="appendToDisplay('π')">π</button>
+            <button class="function operator" id="clear" onclick="clearDisplay()">AC</button>
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button class="operator" onclick="appendToDisplay('*')">×</button>
+            <button class="operator" onclick="appendToDisplay('/')">÷</button>
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button class="operator" onclick="appendToDisplay('+')">+</button>
+            <button class="operator" onclick="appendToDisplay('-')">−</button>
+            <button onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+            <button class="function" onclick="appendToDisplay('e')">e</button>
+            <button id="equals" onclick="calculateResult()">=</button>
+        </div>
+    </div>
+
+    <script>
+        const displayInput = document.getElementById('display-input');
+        const displayExpression = document.getElementById('display-expression');
+        let isResultShown = false;
+
+        function appendToDisplay(value) {
+            if (value === ')') {
+                const openBracesCount = (displayInput.value.match(/\(/g) || []).length;
+                const closeBracesCount = (displayInput.value.match(/\)/g) || []).length;
+                if (openBracesCount <= closeBracesCount) return;
+            }
+            if (isResultShown) {
+                if (['+', '-', '*', '/', '^'].includes(value)) {
+                    displayExpression.textContent = displayInput.value + value;
+                } else {
+                    displayInput.value = '';
+                    displayExpression.textContent = '';
+                }
+                isResultShown = false;
+            }
+            displayInput.value += value;
+        }
+
+        function clearDisplay() {
+            displayInput.value = '';
+            displayExpression.textContent = '';
+            isResultShown = false;
+        }
+
+        function backspace() {
+            if (isResultShown) {
+                clearDisplay();
+                return;
+            }
+            displayInput.value = displayInput.value.slice(0, -1);
+        }
+
+        function degreesToRadians(degrees) {
+            return degrees * (Math.PI / 180);
+        }
+
+        function calculateResult() {
+            if (displayInput.value === '') return;
+
+            let expressionToEvaluate = displayInput.value;
+            let expressionToDisplay = displayInput.value;
+
+            try {
+                const openBraces = (expressionToEvaluate.match(/\(/g) || []).length;
+                const closeBraces = (expressionToEvaluate.match(/\)/g) || []).length;
+                const missingBraces = openBraces - closeBraces;
+                if (missingBraces > 0) {
+                    const closing = ')'.repeat(missingBraces);
+                    expressionToEvaluate += closing;
+                    expressionToDisplay += closing;
+                }
+
+                expressionToEvaluate = expressionToEvaluate
+                    .replace(/(\d)([a-zA-Z√πe\(])/g, '$1*$2')
+                    .replace(/(\))([a-zA-Z√πe\d\(])/g, '$1*$2')
+                    .replace(/([πe])(\d|\()/g, '$1*$2');
+
+                expressionToEvaluate = expressionToEvaluate
+                    .replace(/π/g, 'Math.PI')
+                    .replace(/e/g, 'Math.E')
+                    .replace(/√/g, 'Math.sqrt')
+                    .replace(/log/g, 'Math.log10')
+                    .replace(/ln/g, 'Math.log')
+                    .replace(/\^/g, '**');
+
+                expressionToEvaluate = expressionToEvaluate.replace(/(sin|cos|tan)\(([^)]+)\)/g, (match, func, angle) => {
+                    if (func === 'tan') {
+                        const evaluatedAngle = new Function('return ' + angle)();
+                        if (Math.abs(Math.cos(degreesToRadians(evaluatedAngle))) < 1e-10) {
+                            throw new Error("Undefined");
+                        }
+                    }
+                    return `Math.${func}(degreesToRadians(${angle}))`;
+                });
+
+                const result = new Function('degreesToRadians', 'return ' + expressionToEvaluate)(degreesToRadians);
+
+                if (isNaN(result) || !isFinite(result)) {
+                    throw new Error("Error");
+                }
+
+                displayExpression.textContent = expressionToDisplay + ' =';
+                displayInput.value = parseFloat(result.toFixed(10));
+                isResultShown = true;
+
+            } catch (error) {
+                displayExpression.textContent = '';
+                displayInput.value = error.message.includes("Undefined") ? 'Undefined' : 'Error';
+                isResultShown = true;
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlexiFFCS</title>
+  <link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <img src="logo.jpg" alt="VIT Logo" class="vit-logo">
+    <div class="campus">VIT Vellore Campus</div>
+  </div>
+
+  <div class="header-middle">
+    <h1>FlexiFFCS | VIT</h1>
+  </div>
+
+  <div class="header-right">
+        <a href="profile.html" target="_blank" class="teams-link">
+            <button class="teams-button">Teams</button>
+        </a>
+    </div>
+</header>
+<div class="motivational"> <p>"Experience flexibility in course selection,<br>with a system designed to simplify your academic journey."</p></div>
+
+
+<div class="filter-container">
+  <input type="text" id="myInput" placeholder="Search for slots .... ">
+</div>
+  <div class="table-buttons">
+    <button id="resetBtn">Reset Timetable</button>
+    <button id="shareBtn">Share Timetable</button>
+  </div>
+  
+<div class="table-container">
+  <table border="5" cellpadding="10" cellspacing="0">
+    <caption class="label"><h1>"Welcome to FFCS Portal"</h1>
+<h2>Plan your academics with ease. Register for courses, check your schedule, and more.</h2></caption>
+
+    <tr id="theory">
+      <td class="prompt">THEORY <br> HOURS</td>
+      <td class="theory_hours">8:00 Am <br> to <br> 8:50 Am</td>
+      <td class="theory_hours">9:00 Am <br> to <br> 9:50 Am </td>
+      <td class="theory_hours">10:00 Am <br> to <br> 10:50 Am</td>
+      <td class="theory_hours">11:00 Am <br> to <br> 11:50 Am</td>
+      <td class="theory_hours">12:00 Am <br> to <br> 12:50 Pm</td>
+      <td class="theory_hours"></td>
+      <td rowspan="7" class="lunch"> L <br> U <br> N <br> C <br> H </td>
+      <td class="theory_hours">2:00 pm <br> to <br> 2:50 pm</td>
+      <td class="theory_hours">3:00 pm <br> to <br> 3:50 pm</td>
+      <td class="theory_hours">4:00 pm <br> to <br> 4:50 pm</td>
+      <td class="theory_hours">5:00 pm <br> to <br> 5:50 pm</td>
+      <td class="theory_hours">6:00 pm <br> to <br> 6:50 pm</td>
+      <td class="theory_hours"></td>
+    </tr>
+
+    <tr id="labs">
+      <td class="prompt">LAB <br> HOURS</td>
+      <td class="lab_hours" colspan="2">8:00 Am <br> to <br> 9:40 Am</td>
+      <td class="lab_hours" colspan="2">9:51 Am <br> to <br> 11:30 Am</td>
+      <td class="lab_hours" colspan="2">11:40 Am <br> to <br> 1:20 Pm</td>
+      <td class="lab_hours" colspan="2">2:00 pm <br> to <br> 3:40 pm</td>
+      <td class="lab_hours" colspan="2">3:51 pm <br> to <br> 5:30 pm</td>
+      <td class="lab_hours" colspan="2">5:40 pm <br> to <br> 7:20 pm</td>
+    </tr>
+
+    <tr id="MON">
+      <td class="day">MON</td>
+      <td class="period">A1 / L1</td>
+      <td class="period">F1 / L2</td>
+      <td class="period">D1 / L3</td>
+      <td class="period">TB1 / L4</td>
+      <td class="period">TG1 / L5</td>
+      <td class="period">L6</td>
+      <td class="period">A2 / L31</td>
+      <td class="period">F2 / L32</td>
+      <td class="period">D2 / L33</td>
+      <td class="period">TB2 / L34</td>
+      <td class="period">TG2 / L35</td>
+      <td class="period">L36</td>
+    </tr>
+
+    <tr id="TUE">
+      <td class="day">TUE</td>
+      <td class="period">B1 / L7</td>
+      <td class="period">G1 / L8</td>
+      <td class="period">E1 / L9</td>
+      <td class="period">TC1 / L10</td>
+      <td class="period">TAA1 / L11</td>
+      <td class="period">L12</td>
+      <td class="period">B2 / L37</td>
+      <td class="period">G2 / L38</td>
+      <td class="period">E2 / L39</td>
+      <td class="period">TC2 / L40</td>
+      <td class="period">TAA2 / L41</td>
+      <td class="period">L42</td>
+    </tr>
+
+  <tr id="WED">
+    <td class="day">WED</td>
+    <td class="period">C1 / L13</td>
+    <td class="period">A1 / L14</td>
+    <td class="period">F1 / L15</td>
+    <td class="period">V1 / L16</td>
+    <td class="period">V2 / L17</td>
+    <td class="period">L18</td>
+    <td class="period">C2 / L43</td>
+    <td class="period">A2 / L44</td>
+    <td class="period">F2 / L45</td>
+    <td class="period">TD2 / L46</td>
+    <td class="period">TBB2 / L47</td>
+    <td class="period">L48</td>
+  </tr>
+
+  <tr id="THU">
+    <td class="day">THU</td>
+    <td class="period">D1 / L19</td>
+    <td class="period">B1 / L20</td>
+    <td class="period">G1 / L21</td>
+    <td class="period">TE1 / L22</td>
+    <td class="period">TCC1 / L23</td>
+    <td class="period">L24</td>
+    <td class="period">D2 / L49</td>
+    <td class="period">B2 / L50</td>
+    <td class="period">G2 / L51</td>
+    <td class="period">TE2 / L52</td>
+    <td class="period">TCC2 / L53</td>
+    <td class="period">L54</td>
+  </tr>
+
+  <tr id="FRI">
+    <td class="day">FRI</td>
+    <td class="period">E1 / L25</td>
+    <td class="period">C1 / L26</td>
+    <td class="period">TA1 / L27</td>
+    <td class="period">TF1 / L28</td>
+    <td class="period">TD1 / L29</td>
+    <td class="period">L30</td>
+    <td class="period">E2 / L55</td>
+    <td class="period">C2 / L56</td>
+    <td class="period">TA2 / L57</td>
+    <td class="period">TF2 / L58</td>
+    <td class="period">TDD2 / L59</td>
+    <td class="period">L60</td>
+  </tr>
+  </table>
+</div>
+
+<div class="download-container">
+  <button id="downloadBtn">Download Timetable</button>
+</div>
+<div class="morning">
+  <button class="slot-btn green">A1</button>
+  <button class="slot-btn green">B1</button>
+  <button class="slot-btn green">C1</button>
+  <button class="slot-btn green">D1</button>
+  <button class="slot-btn green">E1</button>
+  <button class="slot-btn green">f1</button>
+  <button class="slot-btn green">G1</button>
+
+  <button class="slot-btn orange">TA1</button>
+  <button class="slot-btn orange">TB1</button>
+  <button class="slot-btn orange">TC1</button>
+  <button class="slot-btn orange">TD1</button>
+  <button class="slot-btn orange">TE1</button>
+  <button class="slot-btn orange">TF1</button>
+  <button class="slot-btn orange">TG1</button>
+
+  <button class="slot-btn yellow">TAA1</button>
+  <button class="slot-btn yellow">TCC1</button>
+
+</div>
+
+<div class="Evening">
+  <button class="slot-btn green">A2</button>
+  <button class="slot-btn green">B2</button>
+  <button class="slot-btn green">C2</button>
+  <button class="slot-btn green">D2</button>
+  <button class="slot-btn green">E2</button>
+  <button class="slot-btn green">F2</button>
+  <button class="slot-btn green">G2</button>
+
+
+  <button class="slot-btn orange">TA2</button>
+  <button class="slot-btn orange">TB2</button>
+  <button class="slot-btn orange">TC2</button>
+  <button class="slot-btn orange">TD2</button>
+  <button class="slot-btn orange">TE2</button>
+  <button class="slot-btn orange">TF2</button>
+  <button class="slot-btn orange">TG2</button>
+
+  <button class="slot-btn yellow">TAA2</button>
+  <button class="slot-btn yellow">TBB2</button>
+  <button class="slot-btn yellow">TCC2</button>
+  <button class="slot-btn yellow">TDD2</button>
+
+</div>
+
+
+<div class="Labs">
+  <button class="labslot">L1 + L2</button>
+  <button class="labslot">L3 + L4</button>
+  <button class="labslot">L5 + L6</button>
+  <button class="labslot">L7 + L8</button>
+  <button class="labslot">L9 + L10</button>
+  <button class="labslot">L11 + L12</button>
+  <button class="labslot">L13 + L14</button>
+  <button class="labslot">L15 + L16</button>
+  <button class="labslot">L17 + L18</button>
+  <button class="labslot">L19 + L20</button>
+  <button class="labslot">L21 + L22</button>
+  <button class="labslot">L23 + L24</button>
+  <button class="labslot">L25 + L26</button>
+  <button class="labslot">L27 + L28</button>
+  <button class="labslot">L29 + L30</button>
+  <button class="labslot">L31 + L32</button>
+  <button class="labslot">L33 + L34</button>
+  <button class="labslot">L35 + L36</button>
+  <button class="labslot">L37 + L38</button>
+  <button class="labslot">L39 + L40</button>
+  <button class="labslot">L41 + L42</button>
+  <button class="labslot">L43 + L44</button>
+  <button class="labslot">L45 + L46</button>
+  <button class="labslot">L47 + L48</button>
+  <button class="labslot">L49 + L50</button>
+  <button class="labslot">L51 + L52</button>
+  <button class="labslot">L53 + L54</button>
+  <button class="labslot">L55 + L56</button>
+  <button class="labslot">L57 + L58</button>
+  <button class="labslot">L59 + L60</button>
+
+</div>
+<footer>
+    <div class="footer-container">
+        <div class="footer-section about">
+            <h3>FlexiFFCS</h3>
+            <p> More than just a timetable,<br>
+                A choice that gives you freedom,<br>
+                A system that adapts to your goals,<br>
+                Because your future deserves flexibility.</p>
+        </div>
+        <div class="footer-section links">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="profile.html">Contact</a></li>
+                <li><a href="https://drive.google.com/file/d/1q76AHZ7CcpX9Lz9ZX9yDk1et66j4YNAg/view?usp=sharing">How it works</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>
+    By continuing to use this site, you agree to our Terms of Service, Privacy Policy, and Cookie Policy.  
+    All trademarks are the property of their respective owners.  
+    2025 ©️ FlexiFFCS | VIT Vellore Campus. All rights reserved.
+</p>
+
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

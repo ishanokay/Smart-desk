@@ -1,0 +1,476 @@
+/* Basic Reset and Global Styles */
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f9fc; 
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+
+header {
+    background-color: #00bcd4; 
+    color: white;
+    width: 100%;
+    /* Must be relative to anchor the h1 */
+    position: relative; 
+    padding: 0; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+}
+
+/* --- HEADER ALIGNMENT FIX (Logo Left, Title Center) --- */
+.header-content {
+    display: flex;
+    /* Use flex-start to keep the logo on the far left */
+    justify-content: flex-start; 
+    align-items: center; 
+    max-width: 930px; 
+    margin: 0 auto; 
+    padding: 12px 20px; 
+    width: 100%;
+}
+
+.header-logo {
+    /* Set specific size and ensure it is the first item */
+    order: -1; 
+    width: 42px; 
+    height: auto;
+    margin-right: 15px; 
+    z-index: 10;
+    margin-left: -293px;
+}
+h1 {
+    /* FIXED: Center the title absolutely across the width of the header */
+    position: absolute;
+    left: 50%;
+    top: 50%; 
+    transform: translate(-50%, -50%); /* Ensures perfect center */
+    font-size: 1.8rem;
+    z-index: 5; 
+    margin-left: -659px;
+    margin-top: -2px;
+}
+.header-content p {
+    position: absolute;
+    left: 50%;
+    /* Positions the paragraph just below the h1 */
+    top: calc(50% + 20px); 
+    transform: translateX(-50%); 
+    
+    font-size: 1rem;
+    margin-top: -32px;
+    font-weight: 400;
+    color: #e7eced; 
+    z-index: 5;
+    white-space: nowrap; 
+    font-weight: bold;
+}
+   
+/* --- END HEADER FIX --- */
+
+.converter-container {
+    width: 90%;
+    max-width: 930px;
+    margin: 84px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 60px rgb(125, 192, 240);
+    border: 1.5px solid black;
+}
+
+
+
+/* Tab Navigation Styling */
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    /* FIX: Clearer line below all tabs */
+    border-bottom: 3px solid #ccc; 
+    margin-bottom: 0; /* Align perfectly with content padding */
+    position: relative;
+    z-index: 1; /* Ensures active tab sits above the line */
+}
+
+.tab-button {
+    flex-grow: 1;
+    padding: 15px 10px;
+    background-color: #f4f4f4; /* Light background for inactive tab */
+    border: 1px solid #ccc;
+    border-bottom: none; /* Sides and top visible */
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #777;
+    transition: all 0.3s;
+    border-radius: 8px 8px 0 0; /* Rounded top corners */
+    margin-right: 2px;
+    margin-bottom: -2px; /* Pulls the tab over the bottom line of the .tabs container */
+}
+
+.tab-button:hover {
+    color: #00bcd4; 
+    background-color: #fff;
+}
+
+.tab-button.active {
+    color: #00bcd4; 
+    background-color: white; /* Matches content background */
+    border-color: #ccc;
+    /* THICK ACCENT LINE: Replaced with a clear bottom border */
+    border-bottom: 3px solid #00bcd4; 
+    margin-bottom: -3px; /* Pulls the active border over the container's line */
+    z-index: 2; 
+}
+/* Content Area Styling */
+.tab-content {
+    padding: 10px 0;
+    display: none; 
+}
+
+.tab-content.active {
+    display: block; 
+}
+
+h2 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+/* --- ALIGNMENT FIXES & SIZING --- */
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 75px;
+    margin-bottom: 40px;
+}
+
+.currency-flag {
+    display: none; 
+}
+
+/* Input and Select Styling (Sizing is now 60px height) */
+.input-group input, 
+.input-group select {
+    padding: 18px 12px; 
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1.3rem; 
+    flex-grow: 1; 
+    min-width: 0; 
+    border: 2px solid black;
+
+}
+
+/* FIX: Ensure the input field has the same visual width as Select2 boxes */
+.input-group input {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 25%; 
+    min-width: 120px;
+    
+}
+
+/* --- Select2 Overrides for Seamless Integration --- */
+.select2-container {
+    flex-grow: 1; 
+}
+
+.select2-container--default .select2-selection--single {
+    height: 60px !important; 
+    border: 1px solid #ccc !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 60px !important; 
+    padding-left: 15px !important; 
+    font-size: 1.3rem !important; 
+    color: #333 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+
+
+}
+
+/* --- FIX: MOVE SEARCH BAR TO BOTTOM --- */
+.select2-dropdown {
+    display: flex !important;
+    flex-direction: column-reverse !important; /* This flips the order of the search bar and results list */
+    border-radius: 8px !important;
+    border-top: none !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.select2-search {
+    order: 2; /* Ensure the search input is placed last in the flow */
+    padding: 10px;
+    border-top: 1px solid #eee; /* Add a separator line above the input */
+}
+
+/* DROPDOWN MENU SIZE ADJUSTMENTS */
+.select2-results__option {
+    font-size: 1.2rem !important;
+    padding: 12px 18px !important; 
+    line-height: 1.4 !important; 
+    font-weight: 500;
+}
+
+.select2-search--dropdown .select2-search__field {
+    font-size: 1.1rem !important;
+    padding: 12px 10px !important; 
+    height: 40px !important; 
+    box-sizing: border-box; 
+    border-radius: 6px;
+}
+/* ------------------------------------------- */
+
+
+.select2-container--default.select2-container--focus .select2-selection--single,
+.input-group input:focus {
+    border-color: #00bcd4 !important; 
+    box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.4) !important;
+    outline: none !important;
+}
+
+.input-group input:focus {
+    border-color: #00bcd4;
+    box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.4);
+    outline: none;
+}
+
+.input-group span {
+    font-weight: 600;
+    color: #555;
+    font-size: 1.3rem;
+}
+
+/* Button Styling */
+.convert-btn {
+    background-color: #7e55c2; 
+    color: white;
+    border: none;
+    padding: 15px 30px; 
+    font-size: 1.15rem; 
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.1s;
+    width: 90%;
+    margin-left: 45px;    
+}
+
+.convert-btn:hover {
+    background-color: #9c82d4;
+    transform: translateY(-1px);
+}
+
+button:hover {
+    background-color: #7e57c2;
+    transform: translateY(-1px);
+}
+
+/* Result Styling */
+.result {
+    margin-top: 25px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #00bcd4; 
+    padding: 15px;
+    background-color: #e0f7fa;
+    border-radius: 8px;
+    text-align: center;
+    border: 1.5px solid black;
+}
+
+
+/* --- FOOTER STYLING --- */
+footer {
+    width: 100%;
+    background-color: #7e55c2; 
+    color: #f7f9fc; 
+    /* DECREASED HEIGHT HERE */
+    padding: 15px 0; 
+    /* ---------------------- */
+    margin-top: auto; 
+    text-align: center;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); 
+    flex-shrink: 0; 
+}
+
+.footer-content p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.footer-content a {
+    color: #00bcd4; 
+    text-decoration: none;
+    font-weight: bold;
+    transition: text-decoration 0.2s;
+}
+
+.footer-content a:hover {
+    text-decoration: underline;
+}
+
+
+/* ---------------- MEDIA QUERIES ---------------- */
+/* ---------------- FINAL MOBILE OPTIMIZATION FIXES ---------------- */
+
+/* Tablets and small laptops (≤ 768px) */
+@media (max-width: 768px) {
+    /* Header Stacking */
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+
+    .header-logo {
+        margin: 0 auto 10px auto;
+        width: 50px;
+    }
+
+    h1 {
+        position: static;
+        transform: none;
+        margin: 5px 0;
+        font-size: 1.6rem;
+        margin-left: 0; 
+    }
+
+    .header-content p {
+        position: static;
+        transform: none;
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .converter-container {
+        margin: 40px auto;
+        padding: 15px;
+        width: 95%; 
+    }
+
+    /* --- Input Groups Stacked --- */
+    .input-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px; /* Vertical gap */
+        margin-bottom: 25px;
+    }
+
+    /* Input/Select elements take full width */
+    .input-group input,
+    .input-group select,
+    .select2-container {
+        flex-basis: auto; 
+        width: 100% !important;
+        font-size: 1.1rem !important;
+    }
+    
+    /* Ensure the 'To' text is centered between stacked inputs */
+    .input-group span {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+    
+    /* FIX: Button needs to break out of the flex stacking to be full width */
+    button {
+        width: 100%;
+        margin: 15px 0;
+        padding: 18px; /* Increase vertical padding for bigger button area */
+        font-size: 1.2rem;
+    }
+}
+
+/* Mobile devices (≤ 480px) */
+/* Mobile devices (≤ 480px) */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.4rem;
+    }
+
+    .header-content p {
+        font-size: 0.85rem;
+    }
+
+    .converter-container {
+        padding: 12px;
+        margin: 25px auto;
+    }
+
+    .tab-button {
+        font-size: 0.9rem;
+        padding: 10px 5px;
+    }
+
+    .input-group {
+        gap: 15px;
+    }
+
+    .input-group input,
+    .select2-container--default .select2-selection--single {
+        font-size: 1rem !important;
+        height: 50px !important;
+        width: 92% !important;
+    }
+    
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 50px !important;
+    }
+
+    .select2-results__option {
+        font-size: 1rem !important;
+        padding: 10px !important;
+    }
+
+    /* --- Convert Button Grey & White Styling --- */
+    .converter-container button {
+        font-size: 1rem;
+        padding: 14px;
+        width: 100%;
+        margin: 15px 0 0 0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-weight: bold;
+        color: #333;
+        background: linear-gradient(135deg, #f9f9f9, #e0e0e0);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .converter-container button:hover {
+        background: linear-gradient(135deg, #e0e0e0, #f9f9f9);
+        transform: scale(1.03);
+        color: #000;
+    }
+
+    .result {
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    footer {
+        font-size: 0.8rem;
+        padding: 10px;
+    }
+}

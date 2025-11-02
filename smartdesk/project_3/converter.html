@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScaleX</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <h1>ScaleX</h1>
+            <img class="header-logo" src="logo.jpeg" alt="AllConvert Logo">
+            <p>Convert Anything, Anywhere.From Currency to Units — All in One</p>
+        </div>
+    </header>
+
+    <div class="converter-container">
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="openConverter(event, 'currency')">💰 Currency</button>
+            <button class="tab-button" onclick="openConverter(event, 'unit')">📏 Unit</button>
+            <button class="tab-button" onclick="openConverter(event, 'temp')">🌡️ Temperature</button>
+        </div>
+
+        <section id="currency" class="tab-content active">
+            <h2>Currency Converter</h2>
+
+            <div class="input-group">
+                <input type="number" id="currency-amount" placeholder="Enter Amount" value="1">
+                <select id="currency-from"></select>
+                <div>To</div> <select id="currency-to"></select>
+            </div>
+
+            <button class="convert-btn" onclick="convertCurrency()">Convert</button>
+            <p class="result" id="currency-result">Result: --</p>
+        </section>
+
+        <section id="unit" class="tab-content">
+            <h2>Unit Converter (Length & Weight)</h2>
+            <div class="input-group">
+                <input type="number" id="unit-value" placeholder="Enter Value">
+
+                <select id="unit-from">
+                    <optgroup label="Length (Metric)">
+                        <option value="m">Meters</option>
+                        <option value="km">Kilometers</option>
+                        <option value="cm">Centimeters</option>
+                        <option value="mm">Millimeters</option>
+                        <option value="um">Micrometers (µm)</option>
+                        <option value="nm">Nanometers (nm)</option>
+                    </optgroup>
+                    <optgroup label="Length (Imperial)">
+                        <option value="mi">Miles</option>
+                        <option value="ft">Feet</option>
+                        <option value="in">Inches</option>
+                        <option value="yd">Yards</option>
+                        <option value="nmi">Nautical Miles</option>
+                    </optgroup>
+                    <optgroup label="Weight/Mass">
+                        <option value="kg">Kilograms</option>
+                        <option value="g">Grams</option>
+                        <option value="mg">Milligrams</option>
+                        <option value="lb">Pounds (lb)</option>
+                        <option value="oz">Ounces (oz)</option>
+                        <option value="ton">Metric Tons</option>
+                    </optgroup>
+                </select>
+                <div>To</div> <select id="unit-to">
+                    <optgroup label="Length (Metric)">
+                        <option value="km">Kilometers</option>
+                        <option value="m">Meters</option>
+                        <option value="cm">Centimeters</option>
+                        <option value="mm">Millimeters</option>
+                        <option value="um">Micrometers (µm)</option>
+                        <option value="nm">Nanometers (nm)</option>
+                    </optgroup>
+                    <optgroup label="Length (Imperial)">
+                        <option value="mi">Miles</option>
+                        <option value="ft">Feet</option>
+                        <option value="in">Inches</option>
+                        <option value="yd">Yards</option>
+                        <option value="nmi">Nautical Miles</option>
+                    </optgroup>
+                    <optgroup label="Weight/Mass">
+                        <option value="kg">Kilograms</option>
+                        <option value="g">Grams</option>
+                        <option value="mg">Milligrams</option>
+                        <option value="lb">Pounds (lb)</option>
+                        <option value="oz">Ounces (oz)</option>
+                        <option value="ton">Metric Tons</option>
+                    </optgroup>
+                </select>
+            </div>
+            <button onclick="convertUnit()">Convert</button>
+            <p class="result" id="unit-result">Result: --</p>
+        </section>
+
+        <section id="temp" class="tab-content">
+            <h2>Temperature Converter</h2>
+            <div class="input-group">
+                <input type="number" id="temp-value" placeholder="Enter Temperature">
+                <select id="temp-from">
+                    <option value="C">Celsius</option>
+                    <option value="F">Fahrenheit</option>
+                    <option value="K">Kelvin</option>
+                </select>
+                <div>To</div> <select id="temp-to">
+                    <option value="F">Fahrenheit</option>
+                    <option value="C">Celsius</option>
+                    <option value="K">Kelvin</option>
+                </select>
+            </div>
+            <button onclick="convertTemp()">Convert</button>
+            <p class="result" id="temp-result">Result: --</p>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 All-in-One Converter Tool. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

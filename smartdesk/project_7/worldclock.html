@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> World Clock</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #a5bdfd, #dee7ff);
+      font-family: "Poppins", sans-serif;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #1c1c54;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    h1::before {
+      content: "🌍";
+    }
+
+    .controls {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    input,
+    select {
+      padding: 10px 14px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    select {
+      min-width: 260px;
+      max-width: 350px;
+    }
+
+    .clock {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, #fff 60%, #e3e8f0);
+      border-radius: 50%;
+      border: 8px solid #fff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      margin: 50px 0 20px;
+    }
+
+    .number {
+      position: absolute;
+      font-weight: 600;
+      color: #1c1c54;
+      font-size: 1.3rem;
+    }
+
+    .number[data-num="12"] { top: 10px; left: 50%; transform: translateX(-50%); }
+    .number[data-num="3"] { right: 10px; top: 50%; transform: translateY(-50%); }
+    .number[data-num="6"] { bottom: 10px; left: 50%; transform: translateX(-50%); }
+    .number[data-num="9"] { left: 10px; top: 50%; transform: translateY(-50%); }
+
+    .hand {
+      position: absolute;
+      transform-origin: bottom center;
+      left: 50%;
+      bottom: 50%;
+      transform: translateX(-50%);
+      border-radius: 4px;
+    }
+
+    .hour { height: 80px; width: 6px; background: #00008b; }
+    .minute { height: 110px; width: 4px; background: #1c1c54; }
+    .second { height: 130px; width: 2px; background: red; }
+
+    .center-dot {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #000;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .time-text {
+      text-align: center;
+      font-weight: bold;
+      color: #1c1c54;
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+    }
+
+    .digital {
+      text-align: center;
+      font-size: 2.2rem;
+      color: #00003d;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 10px 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1> World Clock</h1>
+
+  <div class="controls">
+    <input type="text" id="search" placeholder="Search country or capital..." oninput="filterZones()" />
+    <select id="timezone" onchange="updateTimeZone()"></select>
+  </div>
+
+  <div class="clock" id="clock">
+    <div class="number" data-num="12">12</div>
+    <div class="number" data-num="3">3</div>
+    <div class="number" data-num="6">6</div>
+    <div class="number" data-num="9">9</div>
+
+    <div class="hand hour" id="hour"></div>
+    <div class="hand minute" id="minute"></div>
+    <div class="hand second" id="second"></div>
+    <div class="center-dot"></div>
+  </div>
+
+  <div class="time-text" id="zoneName">Time</div>
+  <div class="digital" id="digitalTime"></div>
+
+  <script>
+    const timezoneSelect = document.getElementById("timezone");
+    const searchInput = document.getElementById("search");
+
+    const popularZones = [
+        "Europe/Tirane", // Albania, Tirane
+        "Africa/Algiers", // Algeria, Algiers
+        "Europe/Andorra", // Andorra, Andorra la Vella
+        "Africa/Luanda", // Angola, Luanda
+        "America/Argentina/Buenos_Aires", // Argentina, Buenos Aires
+        "Asia/Yerevan", // Armenia, Yerevan
+        "Australia/Sydney", // Australia, Canberra
+        "Europe/Vienna", // Austria, Vienna
+        "Asia/Baku", // Azerbaijan, Baku
+        "America/Nassau", // Bahamas, Nassau
+        "Asia/Bahrain", // Bahrain, Manama
+        "Asia/Dhaka", // Bangladesh, Dhaka
+        "America/Barbados", // Barbados, Bridgetown
+        "Europe/Minsk", // Belarus, Minsk
+        "Europe/Brussels", // Belgium, Brussels
+        "America/Belize", // Belize, Belmopan
+        "Africa/Porto-Novo", // Benin, Porto-Novo
+        "Asia/Thimphu", // Bhutan, Thimphu
+        "America/La_Paz", // Bolivia, La Paz
+        "Europe/Sarajevo", // Bosnia and Herzegovina, Sarajevo
+        "Africa/Gaborone", // Botswana, Gaborone
+        "America/Sao_Paulo", // Brazil, Brasília
+        "Asia/Brunei", // Brunei, Bandar Seri Begawan
+        "Europe/Sofia", // Bulgaria, Sofia
+        "Africa/Ouagadougou", // Burkina Faso, Ouagadougou
+        "Africa/Bujumbura", // Burundi, Bujumbura
+        "Asia/Phnom_Penh", // Cambodia, Phnom Penh
+        "Africa/Douala", // Cameroon, Yaoundé
+        "America/Toronto", // Canada, Ottawa
+        "Africa/Bangui", // Central African Republic, Bangui
+        "Africa/Ndjamena", // Chad, N'Djamena
+        "America/Santiago", // Chile, Santiago
+        "Asia/Shanghai", // China, Beijing
+        "America/Bogota", // Colombia, Bogotá
+        "Indian/Comoro", // Comoros, Moroni
+        "Africa/Brazzaville", // Congo, Republic of the, Brazzaville
+        "Africa/Kinshasa", // Congo, Democratic Republic of the, Kinshasa
+        "America/Costa_Rica", // Costa Rica, San José
+        "Europe/Zagreb", // Croatia, Zagreb
+        "America/Havana", // Cuba, Havana
+        "Asia/Nicosia", // Cyprus, Nicosia
+        "Europe/Prague", // Czech Republic, Prague
+        "Europe/Copenhagen", // Denmark, Copenhagen
+        "Africa/Djibouti", // Djibouti, Djibouti
+        "America/Dominica", // Dominica, Roseau
+        "America/Santo_Domingo", // Dominican Republic, Santo Domingo
+        "Pacific/Galapagos", // Ecuador, Quito
+        "Africa/Cairo", // Egypt, Cairo
+        "America/El_Salvador", // El Salvador, San Salvador
+        "Africa/Malabo", // Equatorial Guinea, Malabo
+        "Europe/Tallinn", // Estonia, Tallinn
+        "Africa/Addis_Ababa", // Ethiopia, Addis Ababa
+        "Pacific/Fiji", // Fiji, Suva
+        "Europe/Helsinki", // Finland, Helsinki
+        "Europe/Paris", // France, Paris
+        "Africa/Libreville", // Gabon, Libreville
+        "Africa/Banjul", // Gambia, Banjul
+        "Asia/Tbilisi", // Georgia, Tbilisi
+        "Europe/Berlin", // Germany, Berlin
+        "Africa/Accra", // Ghana, Accra
+        "Europe/Athens", // Greece, Athens
+        "America/Grenada", // Grenada, St. George's
+        "America/Guatemala", // Guatemala, Guatemala City
+        "Africa/Conakry", // Guinea, Conakry
+        "America/Guyana", // Guyana, Georgetown
+        "America/Port-au-Prince", // Haiti, Port-au-Prince
+        "America/Tegucigalpa", // Honduras, Tegucigalpa
+        "Europe/Budapest", // Hungary, Budapest
+        "Atlantic/Reykjavik", // Iceland, Reykjavík
+        "Asia/Kolkata", // India, New Delhi
+        "Asia/Jakarta", // Indonesia, Jakarta
+        "Asia/Tehran", // Iran, Tehran
+        "Asia/Baghdad", // Iraq, Baghdad
+        "Europe/Dublin", // Ireland, Dublin
+        "Asia/Jerusalem", // Israel, Jerusalem
+        "Europe/Rome", // Italy, Rome
+        "America/Jamaica", // Jamaica, Kingston
+        "Asia/Tokyo", // Japan, Tokyo
+        "Asia/Amman", // Jordan, Amman
+        "Asia/Almaty", // Kazakhstan, Nur-Sultan
+        "Africa/Nairobi", // Kenya, Nairobi
+        "Asia/Kuwait", // Kuwait, Kuwait City
+        "Asia/Bishkek", // Kyrgyzstan, Bishkek
+        "Asia/Vientiane", // Laos, Vientiane
+        "Europe/Riga", // Latvia, Riga
+        "Asia/Beirut", // Lebanon, Beirut
+        "Africa/Monrovia", // Liberia, Monrovia
+        "Africa/Tripoli", // Libya, Tripoli
+        "Europe/Vilnius", // Lithuania, Vilnius
+        "Europe/Luxembourg", // Luxembourg, Luxembourg
+        "Europe/Skopje", // North Macedonia, Skopje
+        "Indian/Antananarivo", // Madagascar, Antananarivo
+        "Africa/Blantyre", // Malawi, Lilongwe
+        "Asia/Kuala_Lumpur", // Malaysia, Kuala Lumpur
+        "Indian/Maldives", // Maldives, Malé
+        "Africa/Bamako", // Mali, Bamako
+        "Europe/Malta", // Malta, Valletta
+        "Indian/Mauritius", // Mauritius, Port Louis
+        "America/Mexico_City", // Mexico, Mexico City
+        "Europe/Chisinau", // Moldova, Chișinău
+        "Europe/Monaco", // Monaco, Monaco
+        "Asia/Ulaanbaatar", // Mongolia, Ulaanbaatar
+        "Europe/Podgorica", // Montenegro, Podgorica
+        "Africa/Casablanca", // Morocco, Rabat
+        "Africa/Maputo", // Mozambique, Maputo
+        "Asia/Yangon", // Myanmar, Naypyidaw
+        "Africa/Windhoek", // Namibia, Windhoek
+        "Asia/Kathmandu", // Nepal, Kathmandu
+        "Europe/Amsterdam", // Netherlands, Amsterdam
+        "Pacific/Auckland", // New Zealand, Wellington
+        "America/Managua", // Nicaragua, Managua
+        "Africa/Niamey", // Niger, Niamey
+        "Africa/Lagos", // Nigeria, Abuja
+        "Asia/Pyongyang", // North Korea, Pyongyang
+        "Europe/Oslo", // Norway, Oslo
+        "Asia/Muscat", // Oman, Muscat
+        "Asia/Karachi", // Pakistan, Islamabad
+        "Pacific/Port_Moresby", // Papua New Guinea, Port Moresby
+        "America/Asuncion", // Paraguay, Asunción
+        "America/Lima", // Peru, Lima
+        "Asia/Manila", // Philippines, Manila
+        "Europe/Warsaw", // Poland, Warsaw
+        "Europe/Lisbon", // Portugal, Lisbon
+        "Asia/Qatar", // Qatar, Doha
+        "Europe/Bucharest", // Romania, Bucharest
+        "Europe/Moscow", // Russia, Moscow
+        "Africa/Kigali", // Rwanda, Kigali
+        "Asia/Riyadh", // Saudi Arabia, Riyadh
+        "Africa/Dakar", // Senegal, Dakar
+        "Europe/Belgrade", // Serbia, Belgrade
+        "Africa/Freetown", // Sierra Leone, Freetown
+        "Asia/Singapore", // Singapore, Singapore
+        "Europe/Bratislava", // Slovakia, Bratislava
+        "Europe/Ljubljana", // Slovenia, Ljubljana
+        "Africa/Mogadishu", // Somalia, Mogadishu
+        "Africa/Johannesburg", // South Africa, Pretoria
+        "Africa/Juba", // South Sudan, Juba
+        "Europe/Madrid", // Spain, Madrid
+        "Asia/Colombo", // Sri Lanka, Sri Jayawardenepura Kotte
+        "Africa/Khartoum", // Sudan, Khartoum
+        "Europe/Stockholm", // Sweden, Stockholm
+        "Europe/Zurich", // Switzerland, Bern
+        "Asia/Damascus", // Syria, Damascus
+        "Asia/Dushanbe", // Tajikistan, Dushanbe
+        "Africa/Dar_es_Salaam", // Tanzania, Dodoma
+        "Asia/Bangkok", // Thailand, Bangkok
+        "Africa/Lome", // Togo, Lomé
+        "Pacific/Tongatapu", // Tonga, Nukuʻalofa
+        "America/Port_of_Spain", // Trinidad and Tobago, Port of Spain
+        "Africa/Tunis", // Tunisia, Tunis
+        "Europe/Istanbul", // Turkey, Ankara
+        "Asia/Ashgabat", // Turkmenistan, Ashgabat
+        "Africa/Kampala", // Uganda, Kampala
+        "Europe/Kyiv", // Ukraine, Kyiv
+        "Asia/Dubai", // United Arab Emirates, Abu Dhabi
+        "Europe/London", // United Kingdom, London
+        "America/New_York", // United States, Washington, D.C.
+        "America/Montevideo", // Uruguay, Montevideo
+        "Asia/Tashkent", // Uzbekistan, Tashkent
+        "Pacific/Efate", // Vanuatu, Port Vila
+        "America/Caracas", // Venezuela, Caracas
+        "Asia/Ho_Chi_Minh", // Vietnam, Hanoi
+        "Asia/Aden", // Yemen, Sana'a
+        "Africa/Lusaka", // Zambia, Lusaka
+        "Africa/Harare", // Zimbabwe, Harare
+        "Asia/Kabul", // Afghanistan, Kabul
+        "Africa/Asmara", // Eritrea, Asmara
+        "Africa/Mbabane", // Eswatini, Mbabane
+        "Africa/Maseru", // Lesotho, Maseru
+        "Europe/Vaduz", // Liechtenstein, Vaduz
+        "Europe/San_Marino", // San Marino, San Marino
+        "Asia/Dili" // Timor-Leste, Dili
+    ];
+
+    function populateZones() {
+      timezoneSelect.innerHTML = "";
+      // Sort zones alphabetically for easier navigation
+      popularZones.sort().forEach(zone => {
+        const option = document.createElement("option");
+        option.value = zone;
+        option.textContent = zone.replace(/_/g, " ").replace(/\//g, " / ");
+        timezoneSelect.appendChild(option);
+      });
+      timezoneSelect.value = "Asia/Kolkata";
+      updateClock(); // Start the clock with the default timezone
+    }
+
+    function filterZones() {
+      const query = searchInput.value.toLowerCase();
+      timezoneSelect.innerHTML = "";
+      popularZones
+        .filter(zone => zone.toLowerCase().replace(/_/g, ' ').includes(query))
+        .forEach(zone => {
+          const option = document.createElement("option");
+          option.value = zone;
+          option.textContent = zone.replace(/_/g, " ").replace(/\//g, " / ");
+          timezoneSelect.appendChild(option);
+        });
+    }
+
+    function updateTimeZone() {
+      const selectedZone = timezoneSelect.value;
+      document.getElementById("zoneName").textContent = selectedZone.replace(/_/g, " ").replace(/\//g, " / ");
+      updateClock(); // Immediately update clock on timezone change
+    }
+
+    function updateClock() {
+      const zone = timezoneSelect.value;
+      if (!zone) return; // Don't run if no zone is selected (e.g., during filtering)
+      
+      const now = new Date(new Date().toLocaleString("en-US", { timeZone: zone }));
+
+      const seconds = now.getSeconds();
+      const minutes = now.getMinutes();
+      const hours = now.getHours();
+
+      const secondDeg = seconds * 6;
+      const minuteDeg = minutes * 6 + seconds * 0.1;
+      const hourDeg = (hours % 12) * 30 + minutes * 0.5;
+
+      document.getElementById("second").style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
+      document.getElementById("minute").style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+      document.getElementById("hour").style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+
+      document.getElementById("digitalTime").textContent = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true });
+    }
+
+    populateZones();
+    setInterval(updateClock, 1000);
+    // updateClock(); // This is called by populateZones initially
+  </script>
+</body>
+</html>
+
